@@ -8,9 +8,7 @@ const loginAction = async (page) => {
     if(exists) {
         // loginSeq
         console.log(`No Session Need to Login`)
-
         require('dotenv').config()
-        console.log(process.env)
         await page.type("#UserName", process.env.EMAIL)
         await page.type("#UserPassword", process.env.PASSWORD)
         await page.$eval('#loginButton', btn => btn.click() );
