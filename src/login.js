@@ -8,9 +8,8 @@ const loginAction = async (page) => {
     if(exists) {
         // loginSeq
         console.log(`No Session Need to Login`)
-        require('dotenv').config()
-        await page.type("#UserName", process.env.EMAIL)
-        await page.type("#UserPassword", process.env.PASSWORD)
+        await page.type("#UserName", process.env.QUALTRICS_EMAIL)
+        await page.type("#UserPassword", process.env.QUALTRICS_PASSWORD)
         await page.$eval('#loginButton', btn => btn.click() );
     } else {
         console.log(`Login session is alived`)
