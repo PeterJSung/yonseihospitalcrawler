@@ -1,7 +1,22 @@
 const nodemailer = require('nodemailer');
 
+const extractTimeFormat = () => {
+  const curr = new Date();
+  const utc = curr.getTime()
+  const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+  const timeDate = new Date(utc + KR_TIME_DIFF);
+  return {
+    time: `${timeDate.getUTCHours()}-${timeDate.getMinutes()}`,
+    date: timeDate.toISOString().split('T')[0]
+  }
+}
+
 const mailService = async (buffers) => {
-  const timeInfo = `2022-02-22_17-00`
+  const { time, date } = extractTimeFormat()
+  console.log(time)
+  console.log(date)
+  const totalTimeString = `${date}_${time}`
+  console.log(totalTimeString)
   const transporter = nodemailer.createTransport({
     service: 'gmail',   // 메일 보내는 곳
     prot: 587,
@@ -19,11 +34,11 @@ const mailService = async (buffers) => {
     from: process.env.ROBOT_SENDER_EMAIL, // 보내는 메일의 주소
     to: process.env.RECIEVE_EMAIL, // 수신할 이메일
     subject: "Qualtrics 봇 크롤링 결과", // 메일 제목
-    text: `${timeInfo} 시간대 크롤링 결과.`, // 메일 내용
-    html: 'content',
+    text: `${totalTimeString} 시간대 크롤링 결과.`, // 메일 내용
+    html: `${totalTimeString} 시간대 크롤링 결과.`,
     attachments: [
       {
-        filename: `${timeInfo}.xlsx`,
+        filename: `${totalTimeString}.xlsx`,
         content: buffers,
         contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       }
