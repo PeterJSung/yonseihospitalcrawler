@@ -13,21 +13,18 @@ const extractTimeFormat = () => {
 
 const mailService = async (buffers) => {
   const { time, date } = extractTimeFormat()
-  console.log(time)
-  console.log(date)
   const totalTimeString = `${date}_${time}`
-  console.log(totalTimeString)
   const transporter = nodemailer.createTransport({
     service: 'gmail',   // 메일 보내는 곳
     prot: 587,
     host: 'smtp.gmlail.com',  
     secure: false,  
-    requireTLS: true ,
     auth: {
       user: process.env.ROBOT_SENDER_EMAIL,  // 보내는 메일의 주소
       pass: process.env.ROBOT_SENDER_PASSWORD  // 보내는 메일의 비밀번호
     }
   });
+  console.log(process.env.ROBOT_SENDER_EMAIL)
 
   // 메일 옵션
   const mailOptions = {

@@ -21,22 +21,25 @@ const startDocument = async () => {
     headless: true, 
     args: [
       '--no-sandbox', 
+      '--disable-setuid-sandbox',
       `--window-size=${CONSTANTS.SCEEN.WIDTH},${CONSTANTS.SCEEN.HEIGHT}`] 
     });
   const page = await browser.newPage()
-  await page.setViewport({width: CONSTANTS.SCEEN.WIDTH, height: CONSTANTS.SCEEN.HEIGHT})
-  while(true) {
+  try {
+    await page.setViewport({width: CONSTANTS.SCEEN.WIDTH, height: CONSTANTS.SCEEN.HEIGHT})
+  
     await page.goto(CONSTANTS.MAIN_LINK)
     await page.waitFor(1500)
-    
+      
     await loginAction(page)
     const hospitalIds = await getHospitalIds(page)
-    
+      
     const ret = await surveyParse(page, hospitalIds)
     const buffer = await excelGenerator(ret);
-  
+    
     await mailService(buffer)
-    await sleep(3)
+  } catch(e) {
+    console.error(e)
   }
   
   await page.close()
